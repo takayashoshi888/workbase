@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% set active_page = "data_collection" %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">数据采集</h1>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <i class="bi bi-clipboard-data me-2"></i>费用记录
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('data_collection') }}">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">姓名</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">记录类型</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="record_type" id="individual" value="individual" checked>
+                        <label class="form-check-label" for="individual">
+                            个人
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="record_type" id="team" value="team">
+                        <label class="form-check-label" for="team">
+                            团队
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3" id="team-field" style="display: none;">
+                <div class="col-md-12">
+                    <label for="team_name" class="form-label">团队名称</label>
+                    <input type="text" class="form-control" id="team_name" name="team_name">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="site" class="form-label">现场名称</label>
+                    <select class="form-select" id="site" name="site" required>
+                        <option value="">-- 请选择 --</option>
+                        {% for site in sites %}
+                        <option value="{{ site.id }}">{{ site.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="highway_fee" class="form-label">高速费 (元)</label>
+                    <input type="number" class="form-control" id="highway_fee" name="highway_fee" min="0" step="0.01" value="0">
+                </div>
+                <div class="col-md-6">
+                    <label for="parking_fee" class="form-label">停车费 (元)</label>
+                    <input type="number" class="form-control" id="parking_fee" name="parking_fee" min="0" step="0.01" value="0">
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">提交记录</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const individualRadio = document.getElementById('individual');
+    const teamRadio = document.getElementById('team');
+    const teamField = document.getElementById('team-field');
+    
+    function toggleTeamField() {
+        if (teamRadio.checked) {
+            teamField.style.display = 'block';
+            document.getElementById('team_name').required = true;
+        } else {
+            teamField.style.display = 'none';
+            document.getElementById('team_name').required = false;
+        }
+    }
+    
+    individualRadio.addEventListener('change', toggleTeamField);
+    teamRadio.addEventListener('change', toggleTeamField);
+});
+</script>
+{% endblock %}

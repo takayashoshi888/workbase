@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% set active_page = "dashboard" %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">控制面板</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('data_collection') }}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-circle"></i> 新建记录
+            </a>
+            <a href="{{ url_for('export_csv') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-download"></i> 导出数据
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="value">{{ "%.2f"|format(total_expenses) }}元</div>
+            <div class="label">总费用</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="value">{{ "%.2f"|format(user_expenses) }}元</div>
+            <div class="label">您的费用</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="value">{{ current_user.username }}</div>
+            <div class="label">当前用户</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <i class="bi bi-clock-history me-2"></i>最近记录
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>姓名</th>
+                        <th>人数</th>
+                        <th>现场</th>
+                        <th>高速费</th>
+                        <th>停车费</th>
+                        <th>总计</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in recent_records %}
+                    <tr>
+                        <td>{{ record.date.strftime('%Y-%m-%d') if record.date else '' }}</td>
+                        <td>{{ record.member_name }}</td>
+                        <td>{{ record.person_count }}</td>
+                        <td>{{ record.site.name if record.site else 'Unknown' }}</td>
+                        <td>{{ "%.2f"|format(record.highway_fee) }}元</td>
+                        <td>{{ "%.2f"|format(record.parking_fee) }}元</td>
+                        <td>{{ "%.2f"|format(record.highway_fee + record.parking_fee) }}元</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

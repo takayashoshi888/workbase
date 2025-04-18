@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company_name }} - 提交成功</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+        .success-message {
+            color: #4CAF50;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .back-link {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="公司Logo" class="logo">
+            <div class="company-info">
+                <h1>{{ company_name }}</h1>
+            </div>
+        </div>
+        
+        <div class="success-message">
+            数据提交成功！
+        </div>
+        
+        <p>感谢您的提交，数据已成功记录。</p>
+        
+        <div class="back-link">
+            <a href="{{ url_for('index') }}">返回首页</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company_name }} - 数据采集</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+        .company-info {
+            flex-grow: 1;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            margin: 10px 0;
+        }
+        .radio-option {
+            margin-right: 15px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .admin-link {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="公司Logo" class="logo">
+            <div class="company-info">
+                <h1>{{ company_name }}</h1>
+                <p>数据采集系统 - {{ current_date }}</p>
+            </div>
+        </div>
+        
+        <form action="/submit" method="post">
+            <div class="form-group">
+                <label for="name">姓名:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label>选择类型:</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="user_type" value="individual" checked onclick="toggleTeamField(false)"> 个人
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="user_type" value="team" onclick="toggleTeamField(true)"> 团队
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group hidden" id="team-field">
+                <label for="team_name">团队名称:</label>
+                <input type="text" id="team_name" name="team_name">
+            </div>
+            
+            <div class="form-group">
+                <label for="site">现场名称:</label>
+                <select id="site" name="site" required>
+                    <option value="">-- 请选择 --</option>
+                    {% for site in site_options %}
+                    <option value="{{ site }}">{{ site }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="highway_fee">高速费 (元):</label>
+                <input type="number" id="highway_fee" name="highway_fee" min="0" step="0.01" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="parking_fee">停车费 (元):</label>
+                <input type="number" id="parking_fee" name="parking_fee" min="0" step="0.01" value="0">
+            </div>
+            
+            <button type="submit">提交</button>
+        </form>
+        
+        <div class="admin-link">
+            <a href="{{ url_for('admin_login') }}">管理员入口</a>
+        </div>
+    </div>
+    
+    <script>
+        function toggleTeamField(show) {
+            const teamField = document.getElementById('team-field');
+            const teamInput = document.getElementById('team_name');
+            
+            if (show) {
+                teamField.classList.remove('hidden');
+                teamInput.required = true;
+            } else {
+                teamField.classList.add('hidden');
+                teamInput.required = false;
+            }
+        }
+    </script>
+</body>
+</html>
